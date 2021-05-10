@@ -1,27 +1,56 @@
 {
   "name": "paint-shop-problem",
   "version": "1.0.0",
-  "description": "Solving the paint shop problem",
-  "main": "index.js",
-  "scripts": {
-    "build": "tsc",
-    "test": "jest"
+  "author": "Dan Greene @dgreene1",
+  "bin": {
+    "take-paint-orders": "./bin/run"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dgreene1/paint-shop-problem.git"
+  "bugs": "https://github.com/dgreene1/paint-shop-problem/issues",
+  "dependencies": {
+    "@oclif/command": "^1.8.0",
+    "@oclif/config": "^1.17.0",
+    "@oclif/plugin-help": "^3.2.2",
+    "tslib": "^1.14.1"
   },
-  "author": "Dan Greene",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/dgreene1/paint-shop-problem/issues"
-  },
-  "homepage": "https://github.com/dgreene1/paint-shop-problem#readme",
   "devDependencies": {
+    "@oclif/dev-cli": "^1.26.0",
     "@tsconfig/node12": "^1.0.7",
     "@types/jest": "^26.0.23",
+    "@types/node": "^10.17.59",
+    "eslint": "^5.16.0",
+    "eslint-config-oclif": "^3.1.0",
+    "eslint-config-oclif-typescript": "^0.1.0",
+    "eslint-config-prettier": "^8.3.0",
     "jest": "^26.6.3",
+    "prettier": "^2.3.0",
+    "rimraf": "^3.0.2",
     "ts-jest": "^26.5.6",
-    "typescript": "^4.2.4"
-  }
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.9"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "files": [
+    "/bin",
+    "/lib"
+  ],
+  "homepage": "https://github.com/dgreene1/paint-shop-problem",
+  "keywords": [
+    "oclif"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "oclif": {
+    "bin": "take-paint-orders"
+  },
+  "repository": "dgreene1/paint-shop-problem",
+  "scripts": {
+    "posttest": "eslint . --ext .ts --config .eslintrc",
+    "prepack": "rimraf lib && tsc -b && oclif-dev readme",
+    "test": "jest",
+    "version": "oclif-dev readme && git add README.md",
+    "lint": "eslint src/**/*.ts"
+  },
+  "types": "lib/index.d.ts"
 }

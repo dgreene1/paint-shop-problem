@@ -1,0 +1,18 @@
+{
+  "extends": ["oclif", "oclif-typescript", "prettier"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/interface-name-prefix": "off",
+    "unicorn/prefer-spread": "off",
+    "unicorn/filename-case": "off",
+    "valid-jsdoc": "off"
+  },
+  "overrides": [
+    {
+      "files": ["*.spec.*"],
+      "rules": {
+        "valid-jsdoc": "off"
+      }
+    }
+  ]
+}

@@ -137,8 +137,8 @@ export const parseScenario = (scenario: string): IOrderingScenario => {
   };
 };
 
-export const takeOrders = (orders: string): string => {
-  const scenario = parseScenario(orders);
+export const takeOrders = (scenarioAsString: string): string => {
+  const scenario = parseScenario(scenarioAsString);
   const idealScenario = pickIdealSolution(scenario);
 
   if (idealScenario === false) {
