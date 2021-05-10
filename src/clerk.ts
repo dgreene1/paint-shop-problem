@@ -51,19 +51,19 @@ const parseCustomerOrder = (
 ): CustomerRequest => {
   const chunks = customersOrderRaw.split(" ");
 
-  let currentPaintInProgress: number | undefined = undefined;
+  let currentPaintInProgress: number | undefined;
   const paintsForACust: CustomerRequest = new Map<number, Sheen>();
 
   chunks.forEach((currentChunk) => {
     // is it number?
-    const potentialNumber = parseInt(currentChunk);
+    const potentialNumber = parseInt(currentChunk, 10);
 
     if (!isNaN(potentialNumber)) {
       // is it a paint color we have?
       assertIsKnownPaintColor(potentialNumber, scenario);
       // was it preceded by a number? If so, they forgot to include sheen
       if (typeof currentPaintInProgress === "number") {
-        throw new Error(
+        throw new TypeError(
           `Malformed file: Customer did not provide a sheen for paint "${currentPaintInProgress}" in their order "${customersOrderRaw}"`
         );
       }
@@ -111,10 +111,10 @@ export const parseScenario = (scenario: string): IOrderingScenario => {
     );
   }
   const numOfColorsStringified = lines[0];
-  const numOfColors = parseInt(numOfColorsStringified);
+  const numOfColors = parseInt(numOfColorsStringified, 10);
 
   if (isNaN(numOfColors)) {
-    throw new Error(
+    throw new TypeError(
       `The first line must contain a number that defines the number of paint colors available.`
     );
   }
@@ -143,9 +143,9 @@ export const takeOrders = (scenarioAsString: string): string => {
 
   if (idealScenario === false) {
     return "No solution exists";
-  } else {
-    return Array.from(idealScenario, ([_paintNumber, sheen]) => {
-      return sheen;
-    }).join(" ");
   }
+
+  return Array.from(idealScenario, ([_paintNumber, sheen]) => {
+    return sheen;
+  }).join(" ");
 };

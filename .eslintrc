@@ -5,7 +5,9 @@
     "@typescript-eslint/interface-name-prefix": "off",
     "unicorn/prefer-spread": "off",
     "unicorn/filename-case": "off",
-    "valid-jsdoc": "off"
+    "valid-jsdoc": "off",
+    "no-negated-condition": "off",
+    "no-lonely-if": "off"
   },
   "overrides": [
     {

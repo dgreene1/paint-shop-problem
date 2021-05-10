@@ -28,9 +28,9 @@ const customerApprovesSolution = (input: {
       const possibleSheen = solution.get(paintNumber);
       if (possibleSheen && possibleSheen === sheenRequestedByCustomer) {
         return true;
-      } else {
-        return false;
       }
+
+      return false;
     }
   );
   return approves;
@@ -88,7 +88,7 @@ function createAllSolutons(scenario: IOrderingScenario): IPotentialSolution[] {
     firstPaintToFlip < scenario.numOfColors + 1;
     firstPaintToFlip++
   ) {
-    let paintNumbersToMakeMoreExpensive: number[] = [firstPaintToFlip];
+    const paintNumbersToMakeMoreExpensive: number[] = [firstPaintToFlip];
     for (
       let subsequentColor = firstPaintToFlip;
       subsequentColor < scenario.numOfColors + 1;
@@ -144,9 +144,8 @@ export const pickIdealSolution = (
     return false;
   }
 
-  const solutionByCheapest = solutionsThatSatisfyAllCustomers.sort(
-    cheapnessCompareFn
-  );
+  const solutionByCheapest =
+    solutionsThatSatisfyAllCustomers.sort(cheapnessCompareFn);
 
   return solutionByCheapest[0];
 };
