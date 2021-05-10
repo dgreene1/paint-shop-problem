@@ -27,3 +27,27 @@ Optionally you can run `npx .\bin\run -h`
 ## Publishing
 
 See OClif's [release instructions](https://oclif.io/docs/releasing).
+
+# Usage
+
+<!-- usage -->
+
+```sh-session
+$ npm install -g paint-shop-problem
+$ take-paint-orders COMMAND
+running command...
+$ take-paint-orders (-v|--version|version)
+paint-shop-problem/1.0.0 win32-x64 node-v14.16.0
+$ take-paint-orders --help [COMMAND]
+USAGE
+  $ take-paint-orders COMMAND
+...
+```
+
+<!-- usagestop -->
+
+<!-- # Commands -->
+
+<!-- commands -->
+
+<!-- commandsstop -->
