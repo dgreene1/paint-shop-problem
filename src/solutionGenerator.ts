@@ -1,4 +1,4 @@
-import { CustomerRequest, IOrderingScenario, Sheen } from "./clerk";
+import { isSheen, CustomerRequest, IOrderingScenario, Sheen } from "./clerk";
 
 /**
  * Since this is a branded type, it will help us to not accidentally pass CustomerRequest as an IPotentialSolution
@@ -50,61 +50,35 @@ const allCustomersApproveSolution = (input: {
 const moreExpensiveSheen: Sheen = "M";
 const lessExpensiveSheen: Sheen = "G";
 
-function createSingleSolution(input: {
-  paintNumbersToMakeMoreExpensive: number[];
-  numberOfPaintsToMake: number;
-}): IPotentialSolution {
-  const { numberOfPaintsToMake, paintNumbersToMakeMoreExpensive } = input;
+export function createAllSolutionsInTree(
+  desiredLength: number,
+  prefix = ""
+): string[] {
+  const idx = prefix.length;
+  if (idx === desiredLength) return [prefix];
 
-  const solution = new Map<number, Sheen>();
+  const lower = lessExpensiveSheen;
+  const upper = moreExpensiveSheen;
 
-  for (let index = 1; index < numberOfPaintsToMake + 1; index++) {
-    if (paintNumbersToMakeMoreExpensive.includes(index)) {
-      solution.set(index, moreExpensiveSheen);
-    } else {
-      solution.set(index, lessExpensiveSheen);
-    }
-  }
-
-  return brandAsSolution(solution);
+  return [
+    ...createAllSolutionsInTree(desiredLength, prefix + lower),
+    ...createAllSolutionsInTree(desiredLength, prefix + upper),
+  ];
 }
 
-/**
- * This will start with the cheapest option and then will continue to make new solutions when requested
- */
-function createAllSolutons(scenario: IOrderingScenario): IPotentialSolution[] {
-  const potentialSolutions: IPotentialSolution[] = [];
+const solutionStringToObj = (solutionAsString: string): IPotentialSolution => {
+  return solutionAsString.split("").reduce((record, char, index) => {
+    if (isSheen(char)) {
+      record.set(index + 1, char);
 
-  // Try the option of all cheap paint sheens first
-  const cheapestOption = createSingleSolution({
-    paintNumbersToMakeMoreExpensive: [],
-    numberOfPaintsToMake: scenario.numOfColors,
-  });
-  potentialSolutions.push(cheapestOption);
-
-  // If that didn't work, start to work through other solutions in the set of all permutations
-  for (
-    let firstPaintToFlip = 0;
-    firstPaintToFlip < scenario.numOfColors + 1;
-    firstPaintToFlip++
-  ) {
-    const paintNumbersToMakeMoreExpensive: number[] = [firstPaintToFlip];
-    for (
-      let subsequentColor = firstPaintToFlip;
-      subsequentColor < scenario.numOfColors + 1;
-      subsequentColor++
-    ) {
-      paintNumbersToMakeMoreExpensive.push(subsequentColor);
-      const aSolution = createSingleSolution({
-        paintNumbersToMakeMoreExpensive,
-        numberOfPaintsToMake: scenario.numOfColors,
-      });
-      potentialSolutions.push(aSolution);
+      return record;
     }
-  }
+    throw new Error(
+      `Somehow we got a value in from our internal solution generation code that is not a Sheen value. It was "${char}"`
+    );
+  }, brandAsSolution(new Map<number, Sheen>()));
+};
 
-  return potentialSolutions;
-}
 const getCountOfMatte = (mapObj: IPotentialSolution): number => {
   return Array.from(mapObj, ([paintNumber, sheen]) => ({
     paintNumber,
@@ -129,16 +103,18 @@ export const cheapnessCompareFn = (
 export const pickIdealSolution = (
   scenario: IOrderingScenario
 ): IPotentialSolution | false => {
-  const potentialSolutions = createAllSolutons(scenario);
+  const potentialSolutions = createAllSolutionsInTree(scenario.numOfColors);
 
-  const solutionsThatSatisfyAllCustomers = potentialSolutions.filter(
-    (solution) => {
+  const solutionsThatSatisfyAllCustomers = potentialSolutions
+    .map((solutionAsStr) => {
+      return solutionStringToObj(solutionAsStr);
+    })
+    .filter((solution) => {
       return allCustomersApproveSolution({
         scenario,
         solution,
       });
-    }
-  );
+    });
 
   if (solutionsThatSatisfyAllCustomers.length === 0) {
     return false;

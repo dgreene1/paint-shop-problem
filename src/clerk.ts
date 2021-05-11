@@ -35,7 +35,7 @@ const assertIsKnownPaintColor = (
   );
 };
 
-const assertIsSheen = (desiredSheen: string): desiredSheen is Sheen => {
+export const isSheen = (desiredSheen: string): desiredSheen is Sheen => {
   // This type assertion lets us do a lookup on a narrow key from a widened type
   const ambiguousLookup = sheenRecord as Record<string, string>;
 
@@ -71,7 +71,7 @@ const parseCustomerOrder = (
       currentPaintInProgress = potentialNumber;
     } else {
       // We know that it's not a paint number now, so it better be a sheen color
-      if (!assertIsSheen(currentChunk)) {
+      if (!isSheen(currentChunk)) {
         throw new Error(
           `"${currentChunk}" is not an acceptable Sheen value. Allowed values are ${Object.keys(
             sheenRecord

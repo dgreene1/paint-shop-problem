@@ -16,6 +16,63 @@ describe("takeOrders", () => {
     // Assert
     expect(result).toEqual(expectedResult);
   });
+
+  it("should declare there is no solution for the unsolvable input", () => {
+    // Arrange
+    const input = `1
+    1 G
+    1 M`;
+
+    const expectedResult = `No solution exists`;
+
+    // Act
+    const result = takeOrders(input);
+
+    // Assert
+    expect(result).toEqual(expectedResult);
+  });
+
+  it("should provide correct solution for 'richer example'", () => {
+    // Arrange
+    const input = `5
+    2 M
+    5 G
+    1 G
+    5 G 1 G 4 M
+    3 G
+    5 G
+    3 G 5 G 1 G
+    3 G
+    2 M
+    5 G 1 G
+    2 M
+    5 G
+    4 M
+    5 G 4 M`;
+
+    const expectedResult = `G M G M G`;
+
+    // Act
+    const result = takeOrders(input);
+
+    // Assert
+    expect(result).toEqual(expectedResult);
+  });
+
+  it("should provide correct solution for 'one more example'", () => {
+    // Arrange
+    const input = `2
+    1 G 2 M
+    1 M`;
+
+    const expectedResult = `M M`;
+
+    // Act
+    const result = takeOrders(input);
+
+    // Assert
+    expect(result).toEqual(expectedResult);
+  });
 });
 
 describe("parseScenario", () => {
